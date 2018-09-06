@@ -25,7 +25,16 @@ var pluckFirstLineFromFileAsync = function(filePath) {
 
 // This function should retrieve the status code of a GET request to `url`
 var getStatusCodeAsync = function(url) {
-  // TODO
+
+  return new Promise((resolve, reject) => {
+    request(url, (err, res, body) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res.statusCode);
+      }
+    });
+  });
 };
 
 // Export these functions so we can test them and reuse them in later exercises
@@ -34,16 +43,13 @@ module.exports = {
   pluckFirstLineFromFileAsync: pluckFirstLineFromFileAsync
 };
 
-
-// var pluckFirstLineFromFile = function (filePath, cb) {
-//   fs.readFile(filePath, 'utf-8', (err, body) => {
+// var getStatusCode = function (url, cb) {
+//   request(url, (err, res, body) => {
 //     if (err) {
 //       cb(err);
 //     } else {
-//       console.log('this is the first: ', body.split('\n')[0]);
-//       cb(err, body.split('\n')[0]);
+//       cb(err, res.statusCode);
 //     }
 //   });
-
 //   // TODO
 // };
