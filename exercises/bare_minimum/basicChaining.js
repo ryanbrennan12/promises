@@ -10,10 +10,22 @@
 
 var fs = require('fs');
 var Promise = require('bluebird');
+var request = require('request');
+//import 
+var firstLine = require('./promiseConstructor.js');
+var myProf = require('./promisification.js');
 
+// console.log('this is the func: ', firstLine);
 
 
 var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
+  return firstLine.pluckFirstLineFromFileAsync(readFilePath)
+    .then((username) => { //returned value from puckFirstLine..Promising to next func
+      return myProf.getGitHubProfileAsync(username)
+        .then((profile) => {
+          return fs.writeFileSync(writeFilePath, JSON.stringify(profile));
+        });  
+    });
   // TODO
 };
 
@@ -21,3 +33,11 @@ var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
 module.exports = {
   fetchProfileAndWriteToFile: fetchProfileAndWriteToFile
 };
+
+// Pass the successful value into the resolve function
+// this value will be made available in the next then block
+
+// only 1 value can ever be passed into resolve
+// Pass any errors into the reject function
+// this error will be made available in the catch block
+// return the promise instance. This should be a synchronous step
